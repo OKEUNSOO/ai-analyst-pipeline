@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "ai-pipeline-kit": {
+      "command": "python3",
+      "args": [
+        "<YOUR_PROJECT_ROOT>/skills/ai-pipeline-kit/scripts/mcp_server.py"
+      ],
+      "env": {
+        "AI_PIPELINE_RUNTIME_ROOT": "<YOUR_PROJECT_ROOT>/skills/ai-pipeline-kit/data-ai-pipeline"
+      }
+    }
+  }
+}

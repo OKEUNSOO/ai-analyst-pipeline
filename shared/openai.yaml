@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Pipeline Kit"
+  short_description: "Run analyst-ready data analysis pipeline"
+  default_prompt: "Use $ai-pipeline-kit to analyze /path/to/data.csv and create metrics JSON, reproducible Python, Jupyter notebook, dashboard, report, and validation outputs."
