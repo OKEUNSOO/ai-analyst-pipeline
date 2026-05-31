@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Optional
 
-from plugins.ai_analyst_pipeline.tools import (
+from .tools import (
     handle_create_run,
     handle_status,
     handle_workflow_status,

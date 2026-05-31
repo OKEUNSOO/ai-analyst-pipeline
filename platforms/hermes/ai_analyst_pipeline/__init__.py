@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from plugins.ai_analyst_pipeline.cli import handle_slash
-from plugins.ai_analyst_pipeline.tools import (
+from .cli import handle_slash
+from .tools import (
     AI_PIPELINE_CREATE_RUN_SCHEMA, handle_create_run,
     AI_PIPELINE_STATUS_SCHEMA, handle_status,
     AI_PIPELINE_WORKFLOW_STATUS_SCHEMA, handle_workflow_status,
