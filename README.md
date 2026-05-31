@@ -1,4 +1,4 @@
-# ai-pipeline-kit-hub
+# ai-analyst-pipeline
 
 CSV·Excel·JSON·TSV·PDF 파일을 7단계 AI 분석 파이프라인으로 처리하는 스킬 허브.  
 Claude Code, Codex, Hermes, OpenClaw, Gemini CLI 모두 지원합니다.
@@ -8,22 +8,22 @@ Claude Code, Codex, Hermes, OpenClaw, Gemini CLI 모두 지원합니다.
 **curl 원라이너 (전체 자동 감지):**
 
 ```bash
-curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-pipeline-kit-hub/main/install.sh | bash
+curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-analyst-pipeline/main/install.sh | bash
 ```
 
 **플랫폼 지정:**
 
 ```bash
-curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-pipeline-kit-hub/main/install.sh | bash -s -- claude
-curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-pipeline-kit-hub/main/install.sh | bash -s -- claude codex
-curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-pipeline-kit-hub/main/install.sh | bash -s -- all
+curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-analyst-pipeline/main/install.sh | bash -s -- claude
+curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-analyst-pipeline/main/install.sh | bash -s -- claude codex
+curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-analyst-pipeline/main/install.sh | bash -s -- all
 ```
 
 **gh CLI:**
 
 ```bash
-gh skill install OKEUNSOO/ai-pipeline-kit-hub --agent claude-code --scope user
-gh skill install OKEUNSOO/ai-pipeline-kit-hub --agent codex --scope user
+gh skill install OKEUNSOO/ai-analyst-pipeline --agent claude-code --scope user
+gh skill install OKEUNSOO/ai-analyst-pipeline --agent codex --scope user
 ```
 
 ## 설치 경로
@@ -59,7 +59,7 @@ ai-pipeline-kit으로 /path/to/data.csv 분석해줘
 ## 구조
 
 ```
-ai-pipeline-kit-hub/
+ai-analyst-pipeline/
 ├── shared/             # 공통 리소스 (scripts, references, assets)
 ├── platforms/
 │   ├── claude/         # Claude Code 스킬 (4개)
