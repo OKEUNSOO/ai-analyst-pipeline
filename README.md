@@ -5,24 +5,36 @@ Claude Code, Codex, Hermes, OpenClaw, Gemini CLI 모두 지원합니다.
 
 ## 설치
 
+**curl 원라이너 (전체 자동 감지):**
+
 ```bash
-git clone https://github.com/OKEUNSOO/ai-pipeline-kit-hub
-cd ai-pipeline-kit-hub
-chmod +x install.sh
-./install.sh
+curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-pipeline-kit-hub/main/install.sh | bash
 ```
 
-설치된 플랫폼을 자동 감지하여 각 경로에 스킬을 설치합니다.
+**플랫폼 지정:**
 
-## 수동 설치
+```bash
+curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-pipeline-kit-hub/main/install.sh | bash -s -- claude
+curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-pipeline-kit-hub/main/install.sh | bash -s -- claude codex
+curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-pipeline-kit-hub/main/install.sh | bash -s -- all
+```
 
-| 플랫폼 | 스킬 파일 위치 | 공유 리소스 |
-|--------|--------------|------------|
-| Claude Code | `~/.claude/plugins/ai-pipeline-kit/skills/` | `shared/` 링크 |
-| Codex | `~/.codex/plugins/ai-pipeline-kit/` | `shared/` 링크 |
-| Hermes | `~/.hermes/skills/ai-pipeline-kit/` | `shared/` 링크 |
-| OpenClaw | `~/.openclaw/skills/ai-pipeline-kit/` | `shared/` 링크 |
-| Gemini CLI | `~/.gemini/skills/ai-pipeline-kit/` | `shared/` 링크 |
+**gh CLI:**
+
+```bash
+gh skill install OKEUNSOO/ai-pipeline-kit-hub --agent claude-code --scope user
+gh skill install OKEUNSOO/ai-pipeline-kit-hub --agent codex --scope user
+```
+
+## 설치 경로
+
+| 플랫폼 | 설치 경로 |
+|--------|----------|
+| Claude Code | `~/.claude/plugins/ai-pipeline-kit/skills/` |
+| Codex | `~/.codex/plugins/ai-pipeline-kit/` |
+| Hermes | `~/.hermes/skills/ai-pipeline-kit/` |
+| OpenClaw | `~/.openclaw/skills/ai-pipeline-kit/` |
+| Gemini CLI | `~/.gemini/skills/ai-pipeline-kit/` |
 
 ## 사용법
 
