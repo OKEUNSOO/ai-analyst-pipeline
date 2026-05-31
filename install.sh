@@ -42,33 +42,47 @@ install_codex() {
   cp -r "$REPO_DIR/platforms/codex/." "$CODEX_PLUGIN/"
   link_shared "$CODEX_PLUGIN"
 
-  # marketplace.json에 플러그인 등록
+  # marketplace.json 생성 (Codex 0.135.0+ 스키마)
   MARKETPLACE="$HOME/.agents/plugins/marketplace.json"
   mkdir -p "$(dirname "$MARKETPLACE")"
-  python3 - "$MARKETPLACE" "$CODEX_PLUGIN" <<'PYEOF'
+  python3 - "$MARKETPLACE" <<'PYEOF'
 import sys, json, os
 
 marketplace_path = sys.argv[1]
-plugin_path = sys.argv[2]
 
-if os.path.exists(marketplace_path):
-    with open(marketplace_path) as f:
-        data = json.load(f)
-else:
-    data = {"plugins": []}
-
-plugins = data.get("plugins", [])
-plugins = [p for p in plugins if p.get("name") != "ai-pipeline-kit"]
-plugins.append({
-    "name": "ai-pipeline-kit",
-    "enabled": True,
-    "source": {"type": "local", "path": plugin_path}
-})
-data["plugins"] = plugins
+data = {
+    "name": "ai-pipeline-local",
+    "interface": {
+        "displayName": "AI Pipeline Local"
+    },
+    "plugins": [
+        {
+            "name": "ai-pipeline-kit",
+            "source": {
+                "source": "local",
+                "path": "./.codex/plugins/ai-pipeline-kit"
+            },
+            "policy": {
+                "installation": "AVAILABLE",
+                "authentication": "ON_INSTALL"
+            },
+            "category": "Productivity"
+        }
+    ]
+}
 
 with open(marketplace_path, "w") as f:
     json.dump(data, f, indent=2)
 PYEOF
+
+  # Codex에 플러그인 등록
+  if command -v codex &>/dev/null; then
+    codex plugin add ai-pipeline-kit --marketplace ai-pipeline-local 2>/dev/null && \
+      echo "  → codex plugin 등록 완료" || \
+      echo "  → codex plugin add 실패 — 수동으로 실행하세요: codex plugin add ai-pipeline-kit --marketplace ai-pipeline-local"
+  else
+    echo "  → codex 명령어 없음 — Codex 실행 후 수동 등록: codex plugin add ai-pipeline-kit --marketplace ai-pipeline-local"
+  fi
 
   installed+=("Codex → $CODEX_PLUGIN")
 }
