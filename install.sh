@@ -23,6 +23,25 @@ link_shared() {
   cp -r "$SHARED/assets"     "$dest/assets"
 }
 
+# ── uninstall ────────────────────────────────────────────
+
+uninstall_claude() {
+  rm -rf "$HOME/.claude/plugins/ai-analyst-pipeline"
+}
+
+uninstall_codex() {
+  if command -v codex &>/dev/null; then
+    codex plugin remove ai-analyst-pipeline@ai-analyst-local 2>/dev/null || true
+  fi
+  rm -rf "$HOME/.codex/plugins/ai-analyst-pipeline"
+}
+
+uninstall_hermes()   { rm -rf "$HOME/.hermes/skills/ai-analyst-pipeline"; }
+uninstall_openclaw() { rm -rf "$HOME/.openclaw/skills/ai-analyst-pipeline"; }
+uninstall_gemini()   { rm -rf "$HOME/.gemini/skills/ai-analyst-pipeline"; }
+
+# ── install ──────────────────────────────────────────────
+
 installed=()
 
 install_claude() {
@@ -75,11 +94,10 @@ with open(marketplace_path, "w") as f:
     json.dump(data, f, indent=2)
 PYEOF
 
-  # Codex에 플러그인 등록
   if command -v codex &>/dev/null; then
     codex plugin add ai-analyst-pipeline --marketplace ai-analyst-local 2>/dev/null && \
       echo "  → codex plugin 등록 완료" || \
-      echo "  → codex plugin add 실패 — 수동으로 실행하세요: codex plugin add ai-analyst-pipeline --marketplace ai-analyst-local"
+      echo "  → codex plugin add 실패 — 수동 실행: codex plugin add ai-analyst-pipeline --marketplace ai-analyst-local"
   else
     echo "  → codex 명령어 없음 — Codex 실행 후 수동 등록: codex plugin add ai-analyst-pipeline --marketplace ai-analyst-local"
   fi
@@ -111,38 +129,46 @@ install_gemini() {
   installed+=("Gemini CLI → $GEMINI_SKILL")
 }
 
-# 인자 파싱
-TARGETS=("$@")
+# ── 인자 파싱 ─────────────────────────────────────────────
 
-if [ ${#TARGETS[@]} -eq 0 ]; then
-  # 인자 없으면 자동 감지
-  command -v claude   &>/dev/null || [ -d "$HOME/.claude" ]   && TARGETS+=(claude)
-  command -v codex    &>/dev/null || [ -d "$HOME/.codex" ]    && TARGETS+=(codex)
-  command -v hermes   &>/dev/null || [ -d "$HOME/.hermes" ]   && TARGETS+=(hermes)
-  command -v openclaw &>/dev/null || [ -d "$HOME/.openclaw" ] && TARGETS+=(openclaw)
-  command -v gemini   &>/dev/null || [ -d "$HOME/.gemini" ]   && TARGETS+=(gemini)
+MODE="install"
+PLATFORMS=()
+
+for arg in "$@"; do
+  case "$arg" in
+    update)                               MODE="update" ;;
+    all) PLATFORMS+=(claude codex hermes openclaw gemini) ;;
+    claude|codex|hermes|openclaw|gemini)  PLATFORMS+=("$arg") ;;
+    *) echo "알 수 없는 인자: $arg (update | claude | codex | hermes | openclaw | gemini | all)" ;;
+  esac
+done
+
+# 플랫폼 미지정 시 자동 감지
+if [ ${#PLATFORMS[@]} -eq 0 ]; then
+  command -v claude   &>/dev/null || [ -d "$HOME/.claude" ]   && PLATFORMS+=(claude)
+  command -v codex    &>/dev/null || [ -d "$HOME/.codex" ]    && PLATFORMS+=(codex)
+  command -v hermes   &>/dev/null || [ -d "$HOME/.hermes" ]   && PLATFORMS+=(hermes)
+  command -v openclaw &>/dev/null || [ -d "$HOME/.openclaw" ] && PLATFORMS+=(openclaw)
+  command -v gemini   &>/dev/null || [ -d "$HOME/.gemini" ]   && PLATFORMS+=(gemini)
 fi
 
-for target in "${TARGETS[@]}"; do
-  case "$target" in
-    all)      install_claude; install_codex; install_hermes; install_openclaw; install_gemini ;;
-    claude)   install_claude ;;
-    codex)    install_codex ;;
-    hermes)   install_hermes ;;
-    openclaw) install_openclaw ;;
-    gemini)   install_gemini ;;
-    *)        echo "알 수 없는 플랫폼: $target (claude | codex | hermes | openclaw | gemini | all)" ;;
-  esac
+# ── 실행 ─────────────────────────────────────────────────
+
+for platform in "${PLATFORMS[@]}"; do
+  if [ "$MODE" = "update" ]; then
+    echo "업데이트 중: $platform"
+    "uninstall_$platform"
+  fi
+  "install_$platform"
 done
 
 echo ""
 if [ ${#installed[@]} -eq 0 ]; then
   echo "설치된 플랫폼을 찾지 못했습니다."
-  echo "사용법: ./install.sh [claude|codex|hermes|openclaw|gemini|all]"
+  echo "사용법: ./install.sh [update] [claude|codex|hermes|openclaw|gemini|all]"
 else
-  echo "설치 완료:"
+  echo "${MODE} 완료:"
   for p in "${installed[@]}"; do
     echo "  ✓ $p"
   done
 fi
-
