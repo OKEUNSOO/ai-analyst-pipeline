@@ -2,10 +2,12 @@
 set -e
 
 REPO_URL="https://github.com/OKEUNSOO/ai-analyst-pipeline"
-REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# curl | bash로 실행 시 platforms/ 없으면 tarball 다운로드
-if [ ! -d "$REPO_DIR/platforms" ]; then
+# curl | bash 여부 판단: BASH_SOURCE[0]가 실제 파일이면 로컬 실행
+_SCRIPT="${BASH_SOURCE[0]:-}"
+if [ -f "$_SCRIPT" ] && [ -d "$(dirname "$_SCRIPT")/platforms" ]; then
+  REPO_DIR="$(cd "$(dirname "$_SCRIPT")" && pwd)"
+else
   TMPDIR_CLONE="$(mktemp -d)"
   echo "원격 실행 감지 — 파일 다운로드 중..."
   curl -sL "$REPO_URL/archive/refs/heads/main.tar.gz" | tar xz -C "$TMPDIR_CLONE" --strip-components=1
