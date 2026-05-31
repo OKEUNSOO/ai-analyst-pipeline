@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
 set -e
 
+REPO_URL="https://github.com/OKEUNSOO/ai-analyst-pipeline"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# curl | bash로 실행 시 platforms/ 없으면 임시 클론
+if [ ! -d "$REPO_DIR/platforms" ]; then
+  TMPDIR_CLONE="$(mktemp -d)"
+  echo "원격 실행 감지 — 임시 클론 중..."
+  git clone --depth 1 "$REPO_URL" "$TMPDIR_CLONE" --quiet
+  REPO_DIR="$TMPDIR_CLONE"
+  CLEANUP=1
+fi
+
 SHARED="$REPO_DIR/shared"
 
 link_shared() {
@@ -90,3 +101,5 @@ else
     echo "  ✓ $p"
   done
 fi
+
+[ "${CLEANUP:-0}" = "1" ] && rm -rf "$TMPDIR_CLONE"
