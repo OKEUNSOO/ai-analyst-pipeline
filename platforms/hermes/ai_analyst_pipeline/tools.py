@@ -7,6 +7,9 @@ from pathlib import Path
 
 PLUGIN_DIR = Path(__file__).parent
 SCRIPT = PLUGIN_DIR / "scripts" / "ai_pipeline.py"
+if not SCRIPT.exists():
+    # Development checkout layout: shared runtime script lives at repo/shared/scripts.
+    SCRIPT = PLUGIN_DIR.parents[2] / "shared" / "scripts" / "ai_pipeline.py"
 
 
 def _run(*args: str) -> dict:

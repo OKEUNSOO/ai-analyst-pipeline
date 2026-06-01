@@ -3,6 +3,7 @@ name: ai-analyst-pipeline
 description: Run a durable analyst-ready AI data analysis pipeline for CSV, Excel, JSON, TSV, PDF, or text-table datasets. Use when the user asks to analyze data files, run an AI/data-analysis pipeline, handle multiple datasets, create EDA/KPI/metrics JSON/reproducible Python/notebook/dashboard/report outputs, continue or validate an ai-pipeline run, or inspect run-scoped pipeline outputs.
 version: "0.1.0"
 platforms: [macos, linux, windows]
+user-invocable: true
 metadata:
   openclaw:
     tags: [data-analysis, pipeline, reporting]
